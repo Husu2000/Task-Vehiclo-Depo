@@ -1,0 +1,315 @@
+#include <iostream>
+#include <string>
+#include <cassert>
+using namespace std;
+
+class Engine
+{
+    int* _engine_no = nullptr;
+    string* _company = nullptr;
+    double* _volume = nullptr;
+
+public:
+    Engine()
+    {
+        _engine_no = nullptr;
+        _company = nullptr;
+        _volume = nullptr;
+    }
+
+    Engine(int engine_no, string company, double volume)
+    {
+        SetEngineNo(engine_no);
+        SetCompany(company);
+        SetVolume(volume);
+    }
+
+    void SetEngineNo(int engine_no)
+    {
+        if (engine_no >= 1 && engine_no <= 100) {
+            if (_engine_no != nullptr) delete _engine_no;
+            _engine_no = new int(engine_no);
+            return;
+        }
+        assert(!"Engine nomresi duzgun deyil");
+    }
+
+    void SetCompany(string company)
+    {
+        int len = company.size();
+        if (len >= 1 && len <= 50)
+        {
+            if (_company != nullptr) delete _company;
+            _company = new string(company);
+            return;
+        }
+        else
+            assert(!"Company serte uygun deyil");
+        if (company.size())
+        {
+            _company = new string();
+        }
+    }
+
+    void SetVolume(double volume)
+    {
+        if (volume >= 100 && volume <= 1000)
+        {
+            if (_volume != nullptr) delete _volume;
+            _volume = new double(volume);
+            return;
+        }
+        assert(!"Valume Sertlere uygun gelmir");
+    }
+
+    int GetEngineNo() { return *_engine_no; }
+    string GetCompany() { return*_company; }
+    double GetVolume() { return*_volume; }
+};
+
+class Base
+{
+    static int staticId;
+    int id;
+    string* _model;
+    string* _vendor;
+    Engine* _engine;
+
+public:
+    Base()
+    {
+        id = staticId++;
+        _model = nullptr;
+        _vendor = nullptr;
+        _engine = nullptr;
+    }
+
+    Base(string model, string vendor, Engine engine)
+        : Base()
+    {
+        SetEngine(engine.GetEngineNo(), engine.GetVolume(), engine.GetCompany());
+        SetModel(model);
+        SetVendor(vendor);
+    }
+
+    ~Base()
+    {
+        if (_model != nullptr)
+        {
+            delete _model;
+            _model = nullptr;
+        }
+        if (_vendor != nullptr)
+        {
+            delete _vendor;
+            _vendor = nullptr;
+        }
+        if (_engine != nullptr)
+        {
+            delete _engine;
+            _engine = nullptr;
+        }
+    }
+
+    string* GetModel() { return _model; }
+    string* GetVendor() { return _vendor; }
+    Engine* GetEngine() { return _engine; }
+
+    void SetModel(string model)
+    {
+        int len = model.size();
+        if (len >= 1 && len <= 50)
+            *_model = model;
+        else
+            assert(!"Model serte uygun deyil");
+        if (_vendor == nullptr)
+            _vendor = new string();
+        *_model = model;
+    }
+
+    void SetVendor(string vendor)
+    {
+        int len = vendor.size();
+        if (len >= 1 && len <= 50)
+            *_vendor = vendor;
+        else
+            assert(!"Model serte uygun deyil");
+        if (_vendor == nullptr)
+            _vendor = new string();
+        *_vendor = vendor;
+    }
+
+    void SetEngine(int engine_no, double volume, string company)
+    {
+        _engine->SetCompany(company);
+        _engine->SetEngineNo(engine_no);
+        _engine->SetVolume(volume);
+    }
+};
+
+int BstaticId = 1;
+
+class Car
+{
+    static int static_id;
+    int id;
+    bool _has_spoiler;
+
+public:
+    Car()
+    {
+        _has_spoiler = false;
+        id = static_id++;
+    }
+
+    bool GetHasSpoiler() { return _has_spoiler; }
+
+    void SetHasSpoiler(bool has_spoiler)
+    {
+        if (has_spoiler == 1 || has_spoiler == 0)
+            _has_spoiler = has_spoiler;
+        assert(!"Spoiler serte uygun deyil");
+    }
+};
+
+int static_id = 1;
+
+class Ship
+{
+    static int static_id;
+    int id;
+    bool _has_sail;
+
+public:
+    Ship()
+    {
+        _has_sail = NULL;
+        id = static_id++;
+    }
+
+    bool GetHasSail() { return _has_sail; }
+
+    void SetHasSail(bool has_sail)
+    {
+        if (has_sail == 1 || has_sail == 0)
+            _has_sail = has_sail;
+        assert(!"Yelken serte uygun deyil");
+    }
+};
+
+int Sstatic_id = 1;
+
+class Airplane
+{
+    static int static_id;
+    int id;
+    int _engine_count;
+    int _passengers_capacity;
+
+public:
+    Airplane()
+    {
+        _engine_count = 0;
+        _passengers_capacity = 0;
+        id = static_id++;
+    }
+
+    int GetEngineCount() { return _engine_count; }
+
+    void SetEngineCount(int engine_count)
+    {
+        if (engine_count >= 1)
+            _engine_count = engine_count;
+        assert(!"Motor sayi serte uygun deyil");
+    }
+
+    int GetPassengersCapacity() { return _passengers_capacity; }
+
+    void SetPassengersCapacity(int passengers_capacity)
+    {
+        if (passengers_capacity >= 1)
+            _passengers_capacity = passengers_capacity;
+        assert(!"Yolcu sayi serte uygun deyil");
+    }
+};
+
+int Airplstatic_id = 1;
+
+template <class T>
+class Stack {
+private:
+    stack<T> items;
+
+public:
+    void Push(const T& item) {
+        items.push(item);
+    }
+
+    void Pop() {
+        if (!items.empty()) {
+            items.pop();
+        }
+    }
+
+    void ShowAll() {
+        stack<T> tempStack = items;
+        while (!tempStack.empty()) {
+            T item = tempStack.top();
+            tempStack.pop();
+            cout << item << endl;
+        }
+    }
+};
+
+class VehicleDepo {
+private:
+    Stack<Car> cars;
+    Stack<Ship> ships;
+    Stack<Airplane> airplanes;
+
+public:
+    void AddCar(const Car& car) {
+        cars.Push(car);
+    }
+
+    void AddShip(const Ship& ship) {
+        ships.Push(ship);
+    }
+
+    void AddAirplane(const Airplane& airplane) {
+        airplanes.Push(airplane);
+    }
+
+    void ShowAllVehicles() {
+        cout << "Cars:\n";
+        cars.ShowAll();
+
+        cout << "Ships:\n";
+        ships.ShowAll();
+
+        cout << "Airplanes:\n";
+        airplanes.ShowAll();
+    }
+};
+
+int main() {
+    VehicleDepo vehicleDepo;
+
+    // Adding vehicles to the depo
+    Car car1, car2;
+    Ship ship1, ship2;
+    Airplane airplane1, airplane2;
+
+    vehicleDepo.AddCar(car1);
+    vehicleDepo.AddCar(car2);
+
+    vehicleDepo.AddShip(ship1);
+    vehicleDepo.AddShip(ship2);
+
+    vehicleDepo.AddAirplane(airplane1);
+    vehicleDepo.AddAirplane(airplane2);
+
+    // Showing all vehicles in the depo
+    vehicleDepo.ShowAllVehicles();
+
+}
